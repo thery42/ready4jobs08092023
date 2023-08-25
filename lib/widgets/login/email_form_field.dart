@@ -27,6 +27,7 @@ class _LoginEmailFormFieldState extends State<LoginEmailFormField> {
 
   @override
   Widget build(BuildContext context) {
+    print("Construction du widget LoginEmailFormField");
     return Semantics(
       // Ajout d'une étiquette sémantique pour les lecteurs d'écran
       label: 'Email de connexion',

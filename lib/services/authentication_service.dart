@@ -69,28 +69,6 @@
       }
     }
 
-    Future<User?> signUpWithEmail(String email, String password) async {
-      try {
-        if (!email.contains('@')) {
-          throw AuthenticationError.invalidEmail;
-        }
-
-        UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-
-        return userCredential.user;
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          throw AuthenticationError.weakPassword;
-        } else if (e.code == 'email-already-in-use') {
-          throw AuthenticationError.emailAlreadyInUse;
-        } else {
-          throw AuthenticationError.unknownError;
-        }
-      }
-    }
 
     Future<void> sendPasswordResetEmail(String email) async {
       try {
@@ -149,6 +127,11 @@
       } on FirebaseAuthException catch (e) {
         if (e.code == 'invalid-email') {
           return 'L\'adresse e-mail est mal formatée.';
+
+        } else if (e.code == 'wrong-password') {
+          return 'Mot de passe incorrect.';
+        } else if (e.code == 'user-not-found') {
+          return 'Aucun utilisateur trouvé pour cet e-mail.';
         } else {
           return 'Erreur lors de la connexion de l\'utilisateur';
         }
@@ -157,6 +140,8 @@
         return 'Erreur lors de la connexion de l\'utilisateur';
       }
     }
+
+
 
     Future<void> resendConfirmationEmail() async {
       try {

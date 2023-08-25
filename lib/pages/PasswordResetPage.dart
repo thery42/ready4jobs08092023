@@ -14,19 +14,37 @@ class PasswordResetPage extends StatelessWidget {
 
   PasswordResetPage({this.key}) : super(key: key);
 
-  Future<String> _resetPassword() async {
+  Future<void> _resetPassword(BuildContext context) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(
         email: _emailController.text,
       );
-      // Retourne une chaîne de caractères indiquant que l'email de réinitialisation a été envoyé avec succès.
-      return 'Un email de réinitialisation de mot de passe a été envoyé à ${_emailController.text}. Veuillez vérifier votre boîte de réception.';
+
+      // Show a SnackBar indicating the email was sent successfully
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Un email de réinitialisation de mot de passe a été envoyé à ${_emailController.text}. Veuillez vérifier votre boîte de réception.'),
+          backgroundColor: Colors.green,
+        ),
+      );
     } catch (e) {
-      // Gère les erreurs si nécessaire
+      // Handle errors if necessary
       print('Erreur lors de l\'envoi de l\'email de réinitialisation du mot de passe: ');
-      // Retourne une chaîne de caractères indiquant qu'une erreur s'est produite lors de l'envoi de l'email.
-      return 'Une erreur s\'est produite lors de l\'envoi de l\'email de réinitialisation du mot de passe. Veuillez réessayer plus tard.';
+
+      // Show a SnackBar indicating an error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Une erreur s\'est produite lors de l\'envoi de l\'email de réinitialisation du mot de passe. Veuillez réessayer plus tard.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;  // Return here to prevent the page from closing on error
     }
+
+    // Close the page after a short delay
+    Future.delayed(Duration(seconds: 3), () {
+      Navigator.pop(context);
+    });
   }
 
   @override
@@ -57,7 +75,8 @@ class PasswordResetPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             ElevatedButton(
-              onPressed: _resetPassword,
+              onPressed: () => _resetPassword(context),
+
               child: Text(
                 'Réinitialiser le mot de passe',
                 style: kWelcomeButtonBlackTextStyle,
