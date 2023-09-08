@@ -20,6 +20,8 @@
   import 'package:ready4jobs/widgets/profil/Profil_stream_builder.dart';
   import 'package:ready4jobs/widgets/profil/profil_fetcher.dart';
   import 'package:ready4jobs/widgets/profil/Profil_Button_save.dart';
+
+import 'TermsAndConditionsPage.dart';
   
   
   
@@ -196,6 +198,22 @@
               DeleteButton(),
               SizedBox(height: 16),
               ContactButton(),
+              SizedBox(height: 16),
+              GestureDetector(
+                onTap: () {
+                  // Naviguez vers la page TermsAndConditionsPage
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => TermsAndConditionsPage(),
+                  ));
+                },
+                child: Text(
+                  "Consulter nos Conditions Générales d'Utilisation",
+                  style: TextStyle(
+                    color: Colors.white, // Vous pouvez personnaliser la couleur du texte
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
             ],
 
             Divider(color: Colors.white, thickness: 2,),

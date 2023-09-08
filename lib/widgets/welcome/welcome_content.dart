@@ -12,13 +12,13 @@ class WelcomeContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        const SizedBox(height: 57),
+        const SizedBox(height: 80),
         const WelcomeText(),
-        const SizedBox(height: 40),
+        const SizedBox(height: 72),
         const WelcomeImage(),
         const SizedBox(height: 10),
         const WelcomeDescription(),
-        const SizedBox(height: 110),
+        const SizedBox(height: 86),
         const WelcomeButtons(), // changé à 'WelcomeButtons'
         const SizedBox(height: 10),
       ],

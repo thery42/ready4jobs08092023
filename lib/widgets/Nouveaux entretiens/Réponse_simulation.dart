@@ -1,31 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:ready4jobs/utils/Question_Introduction.dart';
+import 'package:ready4jobs/utils/Question_compétences.dart';
+
+import 'package:ready4jobs/utils/Cv_Question_compétences.dart';
+import 'package:ready4jobs/utils/Question_Experiences.dart';
+import 'package:ready4jobs/utils/Cv_Question_Experiences.dart';
+
+import 'package:ready4jobs/utils/Question_Motivation.dart';
+import 'package:ready4jobs/utils/Question_candidat.dart';
+
+import 'package:ready4jobs/utils/Question_comportement.dart';
+
+
+
 
 class ChatSimulator {
-  static const Color textColor = Colors.black; // Définir la couleur du texte ici
+  static const Color textColor = Colors.black;
+
+  static bool askingIntroductionQuestion = true;
+  static bool askingGeneralQuestions = false;
+  static bool userAnswered = false; // Track if the user has answered the first question in CompetencesGeneralesQuestions
+
+  static bool introductionDone = false; // Ajoutez cette variable pour suivre si l'introduction est terminée
+  static bool firstCompetenceQuestionDone = false; // Ajoutez cette variable pour suivre si la première question de compétence est terminée
+  static bool secondCompetenceQuestionDone = false; // Ajoutez cette variable pour suivre si la deuxième question de compétence est terminée
+  static bool competenceQuestionsCvDone = false; // Ajoutez cette variable pour suivre si les questions de compétences CV sont terminées
+  static bool firstExperienceQuestionDone = false; // Ajoutez cette variable pour suivre si la première question d'expérience est terminée
+  static bool secondExperienceQuestionDone = false; // Ajoutez cette variable pour suivre si la deuxième question d'expérience est terminée
+  static bool experiencesQuestionsCvDone = false; // Ajoutez cette variable pour suivre si les questions d'expériences CV sont terminées
+  static bool comportementQuestionsDone = false; // Ajoutez cette variable pour suivre si les questions de comportement sont terminées
+  static bool motivationQuestionsDone = false; // Ajoutez cette variable pour suivre si les questions de motivation sont terminées
+  static bool candidatQuestionsDone = false; // Ajoutez cette variable pour suivre si les questions de candidat sont terminées
 
   static String getSimulatedResponse(String userMessage) {
-    String lowerUserMessage = userMessage.toLowerCase();
-
-    if (lowerUserMessage == "bonjour") {
-      return "pourriez-vous me donner un aperçu de votre approche de travail et comment elle s'applique à ce poste ?";
-    } else if (lowerUserMessage == "comment ça va ?" || lowerUserMessage == "comment allez-vous ?") {
-      return "Je suis une application, donc je n'ai pas de sentiments, mais je suis là pour vous aider !";
-    } else if (lowerUserMessage.contains("expérience professionnelle") || lowerUserMessage.contains("parlez-moi de votre expérience")) {
-      return "Bien sûr, je serais ravi d'en savoir plus sur votre expérience professionnelle. Pouvez-vous me parler de vos emplois précédents ?";
-    } else if (lowerUserMessage.contains("forces")) {
-      return "C'est une excellente question. Pouvez-vous me dire quelles sont vos principales forces ou compétences ?";
-    } else if (lowerUserMessage.contains("faiblesses") || lowerUserMessage.contains("points à améliorer")) {
-      return "Les faiblesses sont des opportunités de croissance. Pourriez-vous partager une faiblesse que vous travaillez activement pour améliorer ?";
-    } else if (lowerUserMessage.contains("parcours académique") || lowerUserMessage.contains("parlez-moi de vos études")) {
-      return "Je suis intéressé par votre parcours académique. Pourriez-vous me fournir des détails sur vos études et vos réalisations ?";
-    } else if (lowerUserMessage.contains("pourquoi cette entreprise ?") || lowerUserMessage.contains("pourquoi nous ?")) {
-      return "Les employeurs aiment savoir pourquoi les candidats sont intéressés par leur entreprise. Pourriez-vous expliquer ce qui vous attire chez notre entreprise ?";
-    } else if (lowerUserMessage.contains("où vous voyez-vous dans 5 ans ?")) {
-      return "C'est une question commune en entretien. Où vous voyez-vous professionnellement dans cinq ans ?";
-    } else if (lowerUserMessage.contains("avez-vous des questions pour nous ?")) {
-      return "Absolument, poser des questions en entretien démontre votre intérêt. Quelles informations supplémentaires aimeriez-vous obtenir sur le poste ou l'entreprise ?";
+    if (!introductionDone) {
+      introductionDone = true; // Marquez l'introduction comme terminée après la première question
+      return IntroductionQuestions.getRandomQuestion();
+    } else if (!firstCompetenceQuestionDone) {
+      firstCompetenceQuestionDone = true; // Marquez la première question de compétence comme terminée après la première réponse
+      return CompetencesGeneralesQuestions.getRandomQuestion();
+    } else if (!secondCompetenceQuestionDone) {
+      secondCompetenceQuestionDone = true; // Marquez la deuxième question de compétence comme terminée après la première réponse
+      return CompetencesGeneralesQuestions.getRandomQuestion();
+    } else if (!competenceQuestionsCvDone) {
+      competenceQuestionsCvDone = true; // Marquez les questions de compétences CV comme terminées après la première réponse
+      return CompetencesQuestionsCv.getRandomQuestion(); // Ajoutez ici la question de CompetencesQuestionsCv
+    } else if (!firstExperienceQuestionDone) {
+      firstExperienceQuestionDone = true; // Marquez la première question d'expérience comme terminée après la première réponse
+      return ExperiencesQuestions.getRandomQuestion(); // Ajoutez ici la première question de ExperiencesQuestions
+    } else if (!secondExperienceQuestionDone) {
+      secondExperienceQuestionDone = true; // Marquez la deuxième question d'expérience comme terminée après la première réponse
+      return ExperiencesQuestions.getRandomQuestion(); // Ajoutez ici la deuxième question de ExperiencesQuestions
+    } else if (!experiencesQuestionsCvDone) {
+      experiencesQuestionsCvDone = true; // Marquez les questions d'expériences CV comme terminées après la première réponse
+      return ExperiencesQuestionsCv.getRandomQuestion(); // Ajoutez ici la question de ExperiencesQuestionsCv
+    } else if (!comportementQuestionsDone) {
+      comportementQuestionsDone = true; // Marquez les questions de comportement comme terminées après la première réponse
+      return ComportementQuestions.getRandomQuestion(); // Ajoutez ici la question de ComportementQuestions
+    } else if (!motivationQuestionsDone) {
+      motivationQuestionsDone = true; // Marquez les questions de motivation comme terminées après la première réponse
+      return MotivationQuestions.getRandomQuestion(); // Ajoutez ici la question de MotivationQuestions
+    } else if (!candidatQuestionsDone) {
+      candidatQuestionsDone = true; // Ajoutez cette variable pour suivre si les questions de candidat sont terminées
+      return CandidatQuestions.getRandomQuestion(); // Ajoutez ici la question de CandidatQuestions
     } else {
-      return "Je ne suis pas sûr de comprendre. Pourriez-vous reformuler ou poser une question liée à l'entretien ?";
+      // Ignorer les réponses du candidat une fois que les questions de candidat sont terminées
+      return "Merci pour vos réponses. L'entretien est maintenant terminé.";
     }
   }
 }

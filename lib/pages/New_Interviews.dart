@@ -6,8 +6,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 
-import 'package:ready4jobs/widgets/entretiens/Entretien_app_scaffold.dart';
-import 'package:ready4jobs/widgets/entretiens/Entretiens_app_bar.dart';
+import 'package:ready4jobs/widgets/Nouveaux entretiens/NewEntretien_app_scaffold.dart';
+import 'package:ready4jobs/widgets/Nouveaux entretiens/NewEntretien_app_bar.dart';
 import 'package:ready4jobs/widgets/entretiens/Entretiens_constants.dart';
 
 import 'package:ready4jobs/widgets/Nouveaux entretiens/Entretien_timer.dart';
@@ -15,6 +15,7 @@ import 'package:ready4jobs/widgets/Nouveaux entretiens/Entretien_message.dart';
 import 'package:ready4jobs/widgets/Nouveaux entretiens/message_input.dart';
 import 'package:ready4jobs/widgets/Nouveaux entretiens/Entretien_end_boutton.dart';
 import 'package:ready4jobs/widgets/Nouveaux entretiens/Réponse_simulation.dart';
+
 
 
 class ChatPage extends StatefulWidget {
@@ -88,9 +89,8 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    return EntretienAppScaffold(
-      entretiensCustomAppBar: EntretiensCustomAppBar(title: 'Création d\'entretien'),
-      body: Column(
+    return NewEntretienAppScaffold(
+      newEntretiensCustomAppBar: NewEntretiensCustomAppBar(title: 'Création d\'entretien'),   body: Column(
         children: [
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16.0),

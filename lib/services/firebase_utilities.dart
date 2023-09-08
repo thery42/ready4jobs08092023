@@ -46,3 +46,30 @@ Future<void> uploadChatImageToFirebase(GlobalKey key) async {
     print('Failed to upload entretien image: $e');
   }
 }
+
+class FirebaseManager {
+  Future<void> uploadTextToFirebase(String userId, String extractedText) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('cv_text')
+          .add({'text': extractedText});
+    } catch (e) {
+      // Gérez les erreurs d'envoi vers Firebase
+    }
+  }
+}
+
+class FirebaseUtils {
+  static void listenToCVUploads() {
+    FirebaseFirestore.instance.collection('cvs').snapshots().listen((snapshot) {
+      for (var change in snapshot.docChanges) {
+        if (change.type == DocumentChangeType.added) {
+          String cvPath = change.doc.data()?['path'];
+          // Appeler la fonction d'extraction de texte avec cvPath depuis ici.
+        }
+      }
+    });
+  }
+}

@@ -7,7 +7,7 @@ class CvPreviewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 8),
+      //margin: EdgeInsets.only(top: 8),
       child: ElevatedButton(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(kCvButtonColor),
@@ -17,7 +17,7 @@ class CvPreviewWidget extends StatelessWidget {
               side: kCvButtonBorderSide,
             ),
           ),
-          minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 130)),
+          minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 80)),
           elevation: MaterialStateProperty.all<double>(10.0),
           shadowColor: MaterialStateProperty.all<Color>(Colors.black.withOpacity(1)), // Ajout de l'ombre
         ),

@@ -5,7 +5,7 @@ class EntretienTimer {
   int remainingSeconds;
   final void Function() onTimerEnd;
 
-  static const int maxChatDurationInMinutes = 20; // Maximum chat duration in minutes
+  static const int maxChatDurationInMinutes = 10; // Maximum chat duration in minutes
 
   EntretienTimer({
     required this.onTimerEnd,

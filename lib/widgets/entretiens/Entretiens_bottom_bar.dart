@@ -14,7 +14,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
     EntretiensBottomNavigationBarItemInfo(iconData: Icons.description, routeName: '/cv'),
     EntretiensBottomNavigationBarItemInfo(iconData: Icons.calendar_today, routeName: '/entretiens'),
     EntretiensBottomNavigationBarItemInfo(iconData: Icons.person, routeName: '/profil'),
-    EntretiensBottomNavigationBarItemInfo(iconData: Icons.lightbulb, routeName: '/forum'),
+    //EntretiensBottomNavigationBarItemInfo(iconData: Icons.lightbulb, routeName: '/forum'),
   ];
 
   @override

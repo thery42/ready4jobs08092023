@@ -27,6 +27,7 @@
   import 'package:ready4jobs/pages/Forum_Page.dart';
 
 
+
   Future<void> main() async {
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -35,6 +36,8 @@
 
     // Initialize FileDownloader
     FileDownloader(enableLog: true); // J'ai activé les logs pour le débogage. Vous pouvez l'enlever si vous le souhaitez.
+
+
 
     if (kIsWeb || defaultTargetPlatform == TargetPlatform.macOS) {
       // Initialize the Facebook javascript SDK if you decide to use it in the future.

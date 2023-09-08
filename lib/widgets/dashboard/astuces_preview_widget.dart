@@ -5,7 +5,7 @@ class ForumPreviewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 32),
+      //margin: EdgeInsets.only(top: 32),
       child: ElevatedButton(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(kAstuceButtonColor),
