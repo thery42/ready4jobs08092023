@@ -1,46 +1,85 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const pdf = require("pdf-parse");
-
+const pdfjs = require("pdfjs-dist");
+const {extractDetails, removeDetailsFromText} = require("./extractProfileDetails");
+const {standardizeDates} = require("./standartFormatDates");
+const {extractExperienceUsingNPL, removeExperienceFromText} = require("./extractExperienceNPL");
 
 admin.initializeApp();
 
-// Récupérer le chemin du fichier PDF téléchargé
-exports.extractTextFromPDF =
-functions.storage.bucket("ready4job-4f54b.appspot.com")
+exports.extractTextFromPDF = functions.storage
+    .bucket("ready4job-4f54b.appspot.com")
     .object()
     .onFinalize(async (object) => {
       const filePath = object.name;
 
-      // Vérifier si le fichier est dans le répertoire "cvs"
       if (!filePath.startsWith("cvs/")) {
         console.log("Le fichier n'est pas dans le répertoire 'cvs'.");
         return null;
       }
 
-      // Extraire l'ID de l'utilisateur à partir du chemin
-      const userId = filePath.split("/")[1];
-      // Supposant que l'ID de l'utilisateur est le premier élément après "cvs/"
-
-      // Télécharger le PDF depuis le bucket
       const bucket = admin.storage().bucket("ready4job-4f54b.appspot.com");
       const file = bucket.file(filePath);
       const [fileContent] = await file.download();
 
-      // Extraire le texte du PDF avec pdf-parse
-      const pdfData = await pdf(fileContent);
-      const extractedText = pdfData.text;
+      // Convertissez le contenu du fichier en Uint8Array
+      const fileBuffer = Buffer.from(fileContent);
+      const uint8Array = new Uint8Array(fileBuffer);
 
-      // Stocker le texte extrait dans Firestore,
-      const db = admin.firestore();
+      // Utilisez pdf.js pour extraire le texte du PDF
+      const pdfData = await pdfjs.getDocument({data: uint8Array}).promise;
+      const text = await extractTextFromPDF(pdfData);
 
-      // Assurez-vous d'adapter le chemin à votre structure de données
-      const userDocRef = db.collection("users").doc(userId);
-      await userDocRef.collection("extractedTexts").add({
-        content: extractedText,
-      });
+      console.log("Texte extrait du PDF : ");
+      console.log(text);
 
-      // Assurez-vous de retourner quelque
-      // chose pour éviter les erreurs de timeout
+      // Extract and remove the details from the text
+      const details = extractDetails(text);
+      const newText = removeDetailsFromText(text, details);
+
+      console.log("Nouveau texte après suppression des détails:");
+      console.log(newText);
+
+      // Standardiser les dates dans le nouveau texte
+      const textWithStandardizedDates = standardizeDates(newText);
+
+      console.log("Texte avec dates standardisées :");
+      console.log(textWithStandardizedDates);
+
+      // Extract experience from the new text using imported function (Google NLP)
+      const experience = extractExperienceUsingNPL(textWithStandardizedDates);
+
+      console.log("Expérience professionnelle extraite (Google NLP) :");
+      console.log(experience);
+
+      if (Array.isArray(experience) && experience.length > 0) {
+        const textWithoutExperience = removeExperienceFromText(newText, experience);
+
+        console.log("Nouveau texte sans l'expérience :");
+        console.log(textWithoutExperience);
+      } else {
+        console.log("Aucune expérience trouvée.");
+      }
+
       return null;
     });
+
+/**
+ * Extrait le texte d'un document PDF sans traitement supplémentaire.
+ *
+ * @param {Object} pdfData - Les données du PDF.
+ * @return {string} - Le texte brut extrait du PDF.
+ */
+async function extractTextFromPDF(pdfData) {
+  const numPages = pdfData.numPages;
+  let text = "";
+
+  for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+    const page = await pdfData.getPage(pageNum);
+    const pageText = await page.getTextContent();
+    const pageString = pageText.items.map((item) => item.str).join(" ");
+    text += pageString + " "; // Ajoutez un espace après chaque page
+  }
+
+  return text.trim(); // Supprimez les espaces inutiles à la fin du texte
+}
